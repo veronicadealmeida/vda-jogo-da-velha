@@ -69,8 +69,7 @@ export class JogoDaVelhaService {
     this._jogador = this._jogador === this.X ? this.O : this.X;
 
     console.log(this.vitoria);
-    console.log(this.numMovimentos);
-    if (this.vitoria != true && this.numMovimentos < 9) {
+    if (!this.vitoria && this.numMovimentos < 9) {
       this.cpuJogar();
     }
 
@@ -87,6 +86,7 @@ export class JogoDaVelhaService {
   fimJogo(linha: number, coluna: number, tabuleiro: any, jogador: number) {
     let fim: any = false;
 
+    console.log(tabuleiro);
     if (
       tabuleiro[linha][0] === jogador &&
       tabuleiro[linha][1] === jogador &&
@@ -138,7 +138,6 @@ export class JogoDaVelhaService {
   }
 
   cpuJogar(): void {
-    console.log('entrou');
     let jogada: number[] = this.obterJogada(this.O);
 
     if (jogada.length <= 0) {
@@ -151,16 +150,12 @@ export class JogoDaVelhaService {
         for (let j = 0; j < this.TAM_TAB; j++) {
           if (this.tabuleiro[i][j] === this.VAZIO) {
             jogadas.push([i, j]);
-            console.log(i + '-' + j);
           }
         }
       }
       let k = Math.floor(Math.random() * (2 - 0) + 0);
-      console.log('k');
-      console.log(k);
+
       jogada = [jogadas[k][0], jogadas[k][1]];
-      console.log('jogada');
-      console.log(jogada);
     }
 
     this.tabuleiro[jogada[0]][jogada[1]] = this._jogador;
