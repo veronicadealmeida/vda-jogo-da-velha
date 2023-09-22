@@ -26,6 +26,7 @@ export class JogoDaVelhaService {
     this._showFinal = false;
     this.numMovimentos = 0;
     this._jogador = this.X;
+    this.vitoria = false;
     this.inicializarTabuleiro();
   }
 
@@ -67,11 +68,13 @@ export class JogoDaVelhaService {
     this.vitoria = this.fimJogo(posX, posY, this.tabuleiro, this._jogador);
     this._jogador = this._jogador === this.X ? this.O : this.X;
 
-    if (!this.vitoria && this.numMovimentos < 9) {
+    console.log(this.vitoria);
+    console.log(this.numMovimentos);
+    if (this.vitoria != true && this.numMovimentos < 9) {
       this.cpuJogar();
     }
 
-    if (this.vitoria !== false) {
+    if (this.vitoria) {
       this._showFinal = true;
     }
 
@@ -80,6 +83,7 @@ export class JogoDaVelhaService {
       this._showFinal = true;
     }
   }
+
   fimJogo(linha: number, coluna: number, tabuleiro: any, jogador: number) {
     let fim: any = false;
 
@@ -96,9 +100,9 @@ export class JogoDaVelhaService {
     }
 
     if (
-      tabuleiro[coluna][0] === jogador &&
-      tabuleiro[coluna][1] === jogador &&
-      tabuleiro[coluna][2] === jogador
+      tabuleiro[0][coluna] === jogador &&
+      tabuleiro[1][coluna] === jogador &&
+      tabuleiro[2][coluna] === jogador
     ) {
       fim = [
         [0, coluna],
@@ -129,13 +133,14 @@ export class JogoDaVelhaService {
         [1, 1],
         [2, 0],
       ];
-
-      return fim;
     }
+    return fim;
   }
 
   cpuJogar(): void {
+    console.log('entrou');
     let jogada: number[] = this.obterJogada(this.O);
+
     if (jogada.length <= 0) {
       jogada = this.obterJogada(this.X);
     }
@@ -146,11 +151,16 @@ export class JogoDaVelhaService {
         for (let j = 0; j < this.TAM_TAB; j++) {
           if (this.tabuleiro[i][j] === this.VAZIO) {
             jogadas.push([i, j]);
+            console.log(i + '-' + j);
           }
         }
       }
-      let k = Math.floor(Math.random() * (jogadas.length - 1));
+      let k = Math.floor(Math.random() * (2 - 0) + 0);
+      console.log('k');
+      console.log(k);
       jogada = [jogadas[k][0], jogadas[k][1]];
+      console.log('jogada');
+      console.log(jogada);
     }
 
     this.tabuleiro[jogada[0]][jogada[1]] = this._jogador;
@@ -161,6 +171,7 @@ export class JogoDaVelhaService {
       this.tabuleiro,
       this._jogador
     );
+    this._jogador = this._jogador === this.X ? this.O : this.X;
   }
 
   obterJogada(jogador: number): number[] {
@@ -177,10 +188,10 @@ export class JogoDaVelhaService {
         }
         tab[lin][col] = this.VAZIO;
       }
-      return [];
     }
+    return [];
   }
-  
+
   exibirX(posX: number, posY: number): boolean {
     return this.tabuleiro[posX][posY] === this.X;
   }
@@ -200,11 +211,9 @@ export class JogoDaVelhaService {
       if (pos[0] === posX && pos[1] === posY) {
         exibirVitoria = true;
         break;
-        return exibirVitoria;
       }
-
-      return exibirVitoria;
     }
+    return exibirVitoria;
   }
 
   novoJogo(): void {
